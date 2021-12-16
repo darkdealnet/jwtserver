@@ -42,6 +42,9 @@ class SMSConfig(BaseModel):
 
 
 class ServerConfig(BaseModel):
+    host: str
+    port: str
+    max_requests: int
     debug: bool
     clear_redis_before_send_code: bool
 

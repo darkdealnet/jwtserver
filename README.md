@@ -1,17 +1,21 @@
+### start development server
+
 ```python
+# dev.py
 from jwtserver.server import dev
 
 if __name__ == "__main__":
     dev(host="localhost", port=5000, log_level="info")
 ```
 
+### production server
 ```python
 # main.py
 from jwtserver.app import app
 app.debug = False
 ```
 
-
+### system.d
 ```ini
 # jwtserver.service
 [Unit]

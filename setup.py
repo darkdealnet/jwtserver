@@ -8,13 +8,13 @@ with open('README.md', 'r', encoding='utf-8') as fh:
 
 setuptools.setup(
     name='jwtserver',
-    version='0.0.1',
+    version='0.0.3',
     author='Darkdeal',
     author_email='real@darkedal.net',
     description='jwt authorization server',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    license='Apache 2.0',
+    license='Apache2',
     url='https://github.com/darkdealnet/jwtserver',
     classifiers=[
         'Development Status :: 3 - Alpha',
@@ -31,7 +31,6 @@ setuptools.setup(
     package_dir={'': 'src'},
     python_requires=">=3.10",
     install_requires=[
-        'setuptools~=59.6.0',
         'uvicorn==0.16.0',
         'loguru==0.5.3',
         'aioredis==2.0.0',
@@ -47,5 +46,7 @@ setuptools.setup(
         'starlette~=0.16.0',
         'pydantic~=1.8.2',
     ],
-
+    package_data={
+        'jwtserver': ['default.ini'],
+    },
 )
