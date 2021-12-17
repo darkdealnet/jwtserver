@@ -1,3 +1,5 @@
+from typing import Literal
+
 from fastapi.param_functions import Optional, Cookie
 from jose import JWTError, jwt
 from pydantic import BaseModel
@@ -11,18 +13,18 @@ from datetime import datetime, timedelta
 from jwtserver.schemas import UserPD
 from jwtserver.functions.config import load_config
 
-config = load_config().token
+cfg = load_config().token
 
-access_time = timedelta(minutes=config.access_expire_time)
-refresh_time = timedelta(minutes=config.refresh_expire_time)
+access_time = timedelta(minutes=cfg.access_expire_time)
+refresh_time = timedelta(minutes=cfg.refresh_expire_time)
 
 
-class AccessTokenNone(Exception):
+class AccessTokenEx(Exception):
     def __init__(self, text="Please load access token"):
         self.txt = text
 
 
-class RefreshTokenNone(Exception):
+class RefreshTokenEx(Exception):
     def __init__(self, text="Please load refresh token"):
         self.txt = text
 
@@ -44,7 +46,6 @@ class TokenProcessor:
             refresh_token: str = None,
             access_token: str = None,
             user: UserPD = None
-
     ):
         self.user = user
         self.access = access_token
@@ -52,38 +53,17 @@ class TokenProcessor:
         self.refresh = refresh_token
         self.new_refresh = refresh_token
 
-    def payload_access_token_untested(self, access=None):
-        _access = access if access else self.access
-        if _access:
-            return loads(b64decode(_access.split('.', 2)[1] + '=='))
-        raise AccessTokenNone
+    def payload_token_untested(self, token_type: Literal['access', 'refresh']):
+        return loads(b64decode(getattr(self, token_type).split('.', 2)[1] + '=='))
 
-    def payload_refresh_token_untested(self, refresh=None):
-        _refresh = refresh if refresh else self.refresh
-        if _refresh:
-            return loads(b64decode(_refresh.split('.', 2)[1] + '=='))
-        raise RefreshTokenNone
-
-    def payload_refresh_token(self, refresh=None):
-        _refresh = refresh if refresh else self.refresh
-        try:
-            return jwt.decode(_refresh, config.secret_key, algorithms=[config.algorithm])
-        except JWTError as error:
-            logger.critical(error)
-        return None
-
-    def payload_access_token(self, access=None):
-        _access = access if access else self.access
-        try:
-            return jwt.decode(_access, config.secret_key, algorithms=[config.algorithm])
-        except JWTError as error:
-            logger.critical(error)
-        return None
+    def payload_token(self, token_type: Literal['access', 'refresh']):
+        return jwt.decode(getattr(self, token_type), cfg.secret_key, algorithms=[cfg.algorithm])
 
     def create_pair_tokens(self):
         if not self.user:
             raise UserEx
-        user_uuid = self.user.uuid.hex if self.user else self.payload_access_token_untested()['uuid']
+        user_uuid = self.user.uuid.hex if self.user else self.payload_token_untested('access')[
+            'uuid']
         datetime_now = datetime.now()
         secret_sol = (datetime_now + access_time).timestamp()
         payload_access = {
@@ -100,8 +80,8 @@ class TokenProcessor:
         if self.user.is_admin:
             payload_access.update({"isAdmin": self.user.is_admin})
 
-        access_jwt = jwt.encode(payload_access, config.secret_key, algorithm=config.algorithm)
-        refresh_jwt = jwt.encode(payload_refresh, config.secret_key, algorithm=config.algorithm)
+        access_jwt = jwt.encode(payload_access, cfg.secret_key, algorithm=cfg.algorithm)
+        refresh_jwt = jwt.encode(payload_refresh, cfg.secret_key, algorithm=cfg.algorithm)
         logger.info(f'{access_jwt}')
         logger.info(f'{refresh_jwt}')
         self.new_access = access_jwt

@@ -3,7 +3,6 @@ import sys
 import uvicorn
 from loguru import logger
 
-
 import jwtserver.api.v1.views
 
 
