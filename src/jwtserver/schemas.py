@@ -31,12 +31,9 @@ class RegistrationDataPD(BaseModel):
 class UserPD(BaseModel):
     uuid: UUID
     telephone: str
-    is_active: Optional[bool] = False
-    is_admin: Optional[bool] = False
 
     class Config:
         orm_mode = True
-
 
 
 class UserFullPD(UserPD):

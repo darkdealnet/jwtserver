@@ -40,7 +40,6 @@ async def get_current_active_user(Authorization: str = Header(...),
 @app.get("/api/v1/auth/update_token/")
 async def refresh_new_access_token(
         response: Response,
-        # payload: Optional[Data] = Body(...),
         Authorization: str = Header(...),
         refresh_token: Optional[str] = Cookie(None),
         current_user: User = Depends(get_current_active_user),

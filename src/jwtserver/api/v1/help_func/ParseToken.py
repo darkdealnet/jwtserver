@@ -4,8 +4,6 @@ from fastapi.param_functions import Optional, Cookie
 from jose import JWTError, jwt
 from pydantic import BaseModel
 from jwtserver.api.v1.help_func.gen_token_secret import secret
-from jwtserver.functions.init_redis import redis
-from fastapi import HTTPException
 from loguru import logger
 from base64 import b64decode
 from json import loads
@@ -54,9 +52,20 @@ class TokenProcessor:
         self.new_refresh = refresh_token
 
     def payload_token_untested(self, token_type: Literal['access', 'refresh']):
+        """Token untested payload
+        :param str token_type:
+        :return dict data: token payload
+        """
         return loads(b64decode(getattr(self, token_type).split('.', 2)[1] + '=='))
 
     def payload_token(self, token_type: Literal['access', 'refresh']):
+        """Token tested payload
+        :param str token_type:
+        :return dict data: token payload
+        :raises JWTError: If the signature is invalid in any way
+        :raises ExpiredSignatureError: If the signature has expired
+        :raises JWTClaimsError: If any claim is invalid in any way
+        """
         return jwt.decode(getattr(self, token_type), cfg.secret_key, algorithms=[cfg.algorithm])
 
     def create_pair_tokens(self):
@@ -76,9 +85,6 @@ class TokenProcessor:
             "secret": secret(user_uuid, sol=secret_sol)[32:],
             "exp": (datetime_now + refresh_time).timestamp(),
         }
-
-        if self.user.is_admin:
-            payload_access.update({"isAdmin": self.user.is_admin})
 
         access_jwt = jwt.encode(payload_access, cfg.secret_key, algorithm=cfg.algorithm)
         refresh_jwt = jwt.encode(payload_refresh, cfg.secret_key, algorithm=cfg.algorithm)
