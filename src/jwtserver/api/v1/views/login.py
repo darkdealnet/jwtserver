@@ -38,9 +38,9 @@ async def login(
         )
 
     if verify_password(password, user.password):
-        token_processor = TokenProcessor(user=user)
+        token_processor = TokenProcessor()
         logger.debug(token_processor)
-        access_token, refresh_token = token_processor.create_pair_tokens()
+        access_token, refresh_token = token_processor.create_pair_tokens(user.uuid.hex)
         logger.debug(access_token, refresh_token)
         logger.debug(access_token, refresh_token)
         response.set_cookie(

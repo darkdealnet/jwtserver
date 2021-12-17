@@ -38,12 +38,11 @@ async def reg_user(
             return {"error": "user exist"}
         else:
             hashed_password = get_password_hash(data.password)
-
             new_user = User(telephone=data.telephone, is_active=True, password=hashed_password)
             session.add(new_user)
             await session.commit()
-            token_processor = TokenProcessor(user=new_user)
-            access_token, refresh_token = token_processor.create_pair_tokens()
+            token_processor = TokenProcessor()
+            access_token, refresh_token = token_processor.create_pair_tokens(new_user.uuid.hex)
 
             await redis.delete(data.telephone)
             await redis.delete(f"{data.telephone}_reg_token")

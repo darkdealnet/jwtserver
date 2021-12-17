@@ -44,9 +44,7 @@ async def refresh_new_access_token(
         refresh_token: Optional[str] = Cookie(None),
         current_user: User = Depends(get_current_active_user),
 ):
-    token = TokenProcessor(access_token=Authorization.split()[1], refresh_token=refresh_token,
-                           user=current_user)
-
+    token = TokenProcessor(access_token=Authorization.split()[1], refresh_token=refresh_token)
     payload_access_untested = token.payload_token_untested('access')
     payload_refresh_token = token.payload_token('refresh')
 
@@ -57,7 +55,7 @@ async def refresh_new_access_token(
             return {"error": "invalid pair of tokens"}
 
         if _secret_full == secret(payload_access_untested['uuid'], payload_access_untested['exp']):
-            access_token, refresh_token = token.create_pair_tokens()
+            access_token, refresh_token = token.create_pair_tokens(current_user.uuid.hex)
 
             response.set_cookie(
                 key='refresh_token',
@@ -65,7 +63,6 @@ async def refresh_new_access_token(
                 httponly=True,
                 secure=True,
                 max_age=config_token.refresh_expire_time * 60)
-                # max_age=60)
 
             return {"access_token": access_token, "token_type": "JSv1"}
     except AttributeError:

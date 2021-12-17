@@ -68,31 +68,30 @@ class TokenProcessor:
         """
         return jwt.decode(getattr(self, token_type), cfg.secret_key, algorithms=[cfg.algorithm])
 
-    def create_pair_tokens(self):
-        if not self.user:
-            raise UserEx
-        user_uuid = self.user.uuid.hex if self.user else self.payload_token_untested('access')[
-            'uuid']
+    @staticmethod
+    def create_pair_tokens(uuid):
+        """Create two JWT tokens with a shared secret at the same time
+        :return tuple: [access_token, refresh_token]
+        """
         datetime_now = datetime.now()
         secret_sol = (datetime_now + access_time).timestamp()
         payload_access = {
-            "uuid": user_uuid,
-            "secret": secret(user_uuid, sol=secret_sol)[:32],
+            "uuid": uuid,
+            "secret": secret(uuid, sol=secret_sol)[:32],
             "exp": secret_sol
         }
 
         payload_refresh = {
-            "secret": secret(user_uuid, sol=secret_sol)[32:],
+            "secret": secret(uuid, sol=secret_sol)[32:],
             "exp": (datetime_now + refresh_time).timestamp(),
         }
 
         access_jwt = jwt.encode(payload_access, cfg.secret_key, algorithm=cfg.algorithm)
         refresh_jwt = jwt.encode(payload_refresh, cfg.secret_key, algorithm=cfg.algorithm)
-        logger.info(f'{access_jwt}')
-        logger.info(f'{refresh_jwt}')
-        self.new_access = access_jwt
-        self.new_refresh = refresh_jwt
+        logger.info(f'create new {access_jwt=}')
+        logger.info(f'create mew {refresh_jwt=}')
         return access_jwt, refresh_jwt
+
 
     # async def response_refresh_token(self, refresh_token: str = Cookie(None)):
     #     # if not refresh_token:
