@@ -1,8 +1,11 @@
 from typing import Literal
 
+from fastapi import HTTPException
 from fastapi.param_functions import Optional, Cookie
 from jose import JWTError, jwt
 from pydantic import BaseModel
+from starlette import status
+
 from jwtserver.api.v1.help_func.gen_token_secret import secret
 from loguru import logger
 from base64 import b64decode
@@ -17,22 +20,6 @@ access_time = timedelta(minutes=cfg.access_expire_time)
 refresh_time = timedelta(minutes=cfg.refresh_expire_time)
 
 
-class AccessTokenEx(Exception):
-    def __init__(self, text="Please load access token"):
-        self.txt = text
-
-
-class RefreshTokenEx(Exception):
-    def __init__(self, text="Please load refresh token"):
-        self.txt = text
-
-
-class UserEx(Exception):
-    def __init__(self, message="Please load user instance"):
-        self.message = message
-        super().__init__(self.message)
-
-
 class Data(BaseModel):
     access_token: Optional[str] = None
     refresh_token: Optional[str] = None
@@ -43,9 +30,7 @@ class TokenProcessor:
             self,
             refresh_token: str = None,
             access_token: str = None,
-            user: UserPD = None
     ):
-        self.user = user
         self.access = access_token
         self.new_access = access_token
         self.refresh = refresh_token
@@ -66,7 +51,15 @@ class TokenProcessor:
         :raises ExpiredSignatureError: If the signature has expired
         :raises JWTClaimsError: If any claim is invalid in any way
         """
-        return jwt.decode(getattr(self, token_type), cfg.secret_key, algorithms=[cfg.algorithm])
+        try:
+            return jwt.decode(getattr(self, token_type), cfg.secret_key,
+                              algorithms=[cfg.algorithm])
+        except JWTError:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Bad JWT token",
+                headers={"WWW-Authenticate": "JSv1"},
+            )
 
     @staticmethod
     def create_pair_tokens(uuid):
@@ -91,16 +84,3 @@ class TokenProcessor:
         logger.info(f'create new {access_jwt=}')
         logger.info(f'create mew {refresh_jwt=}')
         return access_jwt, refresh_jwt
-
-
-    # async def response_refresh_token(self, refresh_token: str = Cookie(None)):
-    #     # if not refresh_token:
-    #     #     raise HTTPException(status_code=400, detail="Invalid refresh token")
-    #     return refresh_token
-    #
-    # def code_validation(self, code, telephone):
-    #     value = redis.get(telephone)
-    #     code_in_redis = value if value else None
-    #     if code != code_in_redis:
-    #         raise HTTPException(status_code=400, detail="Fake user")
-    #     return code

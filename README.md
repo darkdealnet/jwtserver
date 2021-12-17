@@ -1,4 +1,30 @@
+<p align="center">
+    <em>JWTServer is very light, fast. Simple setup.</em>
+</p>
+<p align="center">
+<a href="https://pypi.org/project/jwtserver" target="_blank">
+    <img src="https://img.shields.io/pypi/v/jwtserver?color=%2334D058&label=pypi%20package" alt="Package version">
+</a>
+<a href="https://pypi.org/project/jwtserver" target="_blank">
+    <img src="https://img.shields.io/pypi/pyversions/jwtserver.svg?color=%2334D058" alt="Supported Python versions">
+</a>
+</p>
+
+---
+
+**Wiki** [https://github.com/darkdealnet/jwtserver/wiki](https://github.com/darkdealnet/jwtserver "JWTServer Wiki")
+
+**Source Code** [https://github.com/darkdealnet/jwtserver](https://github.com/darkdealnet/jwtserver "The Fast JWTServer")
+
+---
+
+```shell
+pip install jwtserver
+```
+
 ### start development server
+This project can make life easier for front-end development, or it can act as a full-fledged
+authorization microservice based on tokens.
 
 ```python
 # dev.py

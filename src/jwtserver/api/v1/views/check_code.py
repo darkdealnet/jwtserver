@@ -18,15 +18,24 @@ class Data(BaseModel):
     code: str
 
 
-@app.post("/api/v1/auth/check_code/")
+class CheckCodeResponse(BaseModel):
+    reg_token: str
+
+
+@app.post("/api/v1/auth/check_code/", response_model=CheckCodeResponse)
 async def check_code(
         telephone: str = Body(...),
         code: int = Body(...),
         redis: Redis = Depends(redis_conn),
         recaptcha: RecaptchaV3 = Depends(RecaptchaV3)
 ):
-    """Проверка кода, если все ок, в ответ высылает токен регистрации.
-    токен хранится час в редисе"""
+    """Checking the code from SMS or Call
+    :param str telephone:
+    :param int code:
+    :param redis: Redis client
+    :param recaptcha: Validate Google Recaptcha v3 [return True or HTTPException]
+    :return: one-time token for registration
+    """
     await recaptcha.set_action_name('SignUpPage/CheckCode').greenlight()
 
     code_method = await redis.get(telephone)

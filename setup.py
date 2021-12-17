@@ -8,7 +8,7 @@ with open('README.md', 'r', encoding='utf-8') as fh:
 
 setuptools.setup(
     name='jwtserver',
-    version='0.0.5',
+    version='0.0.7',
     author='Darkdeal',
     author_email='real@darkedal.net',
     description='jwt authorization server',
