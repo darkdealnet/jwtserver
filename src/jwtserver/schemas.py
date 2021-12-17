@@ -1,6 +1,4 @@
-from typing import List, Optional
-# from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-import jwtserver.models as models
+from typing import Optional
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -39,13 +37,6 @@ class UserPD(BaseModel):
     class Config:
         orm_mode = True
 
-
-# class UserMarshSchema(SQLAlchemyAutoSchema):
-#     class Meta:
-#         model = models.User
-#         include_fk = True
-#         load_instance = True
-#         exclude = ('password',)
 
 
 class UserFullPD(UserPD):

@@ -3,6 +3,7 @@ import importlib.resources as pkg_resources
 from collections import defaultdict
 from typing import Optional
 from pydantic import BaseModel
+from functools import lru_cache
 
 import jwtserver
 
@@ -58,6 +59,7 @@ class Config(BaseModel):
     sms: SMSConfig
 
 
+@lru_cache
 def load_config() -> Config:
     """
     Load default and user config. Merge configs (override default values) and typing.
