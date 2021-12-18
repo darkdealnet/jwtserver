@@ -4,7 +4,7 @@ from fastapi import Depends, Body
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from jwtserver.api.v1.help_func.recaptcha import RecaptchaV3
+from jwtserver.Google.Recaptcha_v3 import Recaptcha
 from jwtserver.functions.init_redis import redis_conn
 from jwtserver.models import User
 from jwtserver.app import app
@@ -21,7 +21,7 @@ async def phone_status(
         telephone: str = Body(...),
         redis: Redis = Depends(redis_conn),
         session: AsyncSession = Depends(async_db_session),
-        recaptcha: RecaptchaV3 = Depends(RecaptchaV3)
+        recaptcha: Recaptcha = Depends(Recaptcha)
 ):
     await recaptcha.set_action_name('SignUpPage/PhoneStatus').greenlight()
     stmt = select(User).where(User.telephone == telephone)

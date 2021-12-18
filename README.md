@@ -96,16 +96,20 @@ async_test_url =
 url = redis://localhost
 max_connections = 10
 
-[google]
+[recaptcha_v3]
 ;secret key for RecaptchaV3
 secret_key =
+;the score for this request (0.0 - 1.0)
+;minimal score
+score = 0.7
 
 [sms]
 ;if debug, then there is an imitation of sending SMS messages.
 debug = True
 
-;smsc.ru
+;sms provider, example smsc.ru
 provider = smsc
+
 ;class responsible for the logic of sending SMS and calls
 init_class = jwtserver.functions.SMSC
 login =

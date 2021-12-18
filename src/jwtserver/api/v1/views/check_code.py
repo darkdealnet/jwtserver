@@ -3,7 +3,7 @@ from fastapi import Depends, HTTPException, Body
 from secrets import token_hex
 from starlette import status
 
-from jwtserver.api.v1.help_func.recaptcha import RecaptchaV3
+from jwtserver.Google.Recaptcha_v3 import Recaptcha
 from jwtserver.functions.SMSC import SMSCRULES
 from jwtserver.app import app
 from pydantic import BaseModel
@@ -27,7 +27,7 @@ async def check_code(
         telephone: str = Body(...),
         code: int = Body(...),
         redis: Redis = Depends(redis_conn),
-        recaptcha: RecaptchaV3 = Depends(RecaptchaV3)
+        recaptcha: Recaptcha = Depends(Recaptcha)
 ):
     """Checking the code from SMS or Call
     :param str telephone:

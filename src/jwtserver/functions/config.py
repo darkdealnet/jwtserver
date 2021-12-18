@@ -28,8 +28,9 @@ class RedisConfig(BaseModel):
     max_connections: int
 
 
-class GoogleConfig(BaseModel):
+class Recaptcha_v3Config(BaseModel):
     secret_key: str
+    score: float
 
 
 class SMSConfig(BaseModel):
@@ -55,7 +56,7 @@ class Config(BaseModel):
     token: TokenConfig
     db: DbConfig
     redis: RedisConfig
-    google: GoogleConfig
+    recaptcha_v3: Recaptcha_v3Config
     sms: SMSConfig
 
 

@@ -3,7 +3,7 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.future import select
 from starlette import status
 from jwtserver.api.v1.help_func.ParseToken import TokenProcessor
-from jwtserver.api.v1.help_func.recaptcha import RecaptchaV3
+from jwtserver.Google.Recaptcha_v3 import Recaptcha
 from jwtserver.app import app
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends, Response, HTTPException, Body
@@ -21,7 +21,7 @@ async def login(
         telephone: str = Body(...),
         password: str = Body(...),
         session: AsyncSession = Depends(async_db_session),
-        recaptcha: RecaptchaV3 = Depends(RecaptchaV3)
+        recaptcha: Recaptcha = Depends(Recaptcha)
 ):
     logger.debug(telephone, password)
     await recaptcha.set_action_name('LoginPage/LoginButton').greenlight()
