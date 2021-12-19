@@ -5,6 +5,10 @@ site_url: https://darkdealnet.github.io/jwtserver/
 copyright: sdfsdffd
 repo_url: https://github.com/darkdealnet/jwtserver
 theme: readthedocs
+
+nav:
+  - index.md
+
 #theme:
 #  features:
 #    - navigation.tabs
