@@ -1,2 +1,0 @@
-# about
-lfng hkjdfn khgndfkj

@@ -10,7 +10,7 @@ config = load_config().recaptcha_v3
 
 
 class Recaptcha:
-    """Recaptcha v3
+    """Recaptcha.md v3
     :raises HTTPException:
     https://www.google.com/recaptcha/admin/create"""
 
@@ -24,7 +24,7 @@ class Recaptcha:
         self.r_json = None
         self.recaptcha_token = recaptcha_token
 
-    def set_action_name(self, name) -> 'Recaptcha':
+    def set_action_name(self, name) -> 'Recaptcha.md':
         """Set google action name"""
         self.action_name = name
         return self
@@ -55,7 +55,7 @@ class Recaptcha:
 
         return True
 
-    async def check(self) -> 'Recaptcha':
+    async def check(self) -> 'Recaptcha.md':
         """send post and save response json to self.r_json"""
         data = {
             'secret': config.secret_key,

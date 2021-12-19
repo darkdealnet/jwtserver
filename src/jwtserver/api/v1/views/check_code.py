@@ -28,7 +28,7 @@ async def check_code(
     :param str telephone:
     :param int code:
     :param redis: Redis client
-    :param recaptcha: Validate Google Recaptcha v3 [return True or HTTPException]
+    :param recaptcha: Validate Google Recaptcha.md v3 [return True or HTTPException]
     :return: one-time token for registration
     """
     await recaptcha.set_action_name('SignUpPage/CheckCode').greenlight()

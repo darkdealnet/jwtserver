@@ -125,7 +125,7 @@ score = 0.7
 ;if debug, then there is an imitation of sending SMS messages.
 debug = True
 
-;sms provider, example smsc.ru
+;sms provider, example smsc.en
 provider = smsc
 
 ;class responsible for the logic of sending SMS and calls

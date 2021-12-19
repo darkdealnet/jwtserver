@@ -1,19 +1,23 @@
 site_name: My Docs
+site_author:
 site_description: FastAPI framework, high performance, easy to learn, fast to code, ready for production
 site_url: https://darkdealnet.github.io/jwtserver/
+copyright: sdfsdffd
+repo_url: https://github.com/darkdealnet/jwtserver
+
 theme:
   name: material
-  language: en
 
 extra:
   alternate:
-    - name: Russian
-      link: /ru/
-      lang: ru
+    - name: English
+      link: /en/
+      lang: en
 
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
+  - smarty
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
