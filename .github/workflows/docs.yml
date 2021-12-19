@@ -1,7 +1,7 @@
 name: docs
 on:
   push:
-    branches: 
+    branches:
       - master
       - main
 jobs:
@@ -10,8 +10,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
+      - run: pip install mkdocs-material
+      - run: mkdocs gh-deploy --force
         with:
           python-version: 3.x
           configfile: 'mkdocs.yml'
-      - run: pip install mkdocs-material 
-      - run: mkdocs gh-deploy --force
