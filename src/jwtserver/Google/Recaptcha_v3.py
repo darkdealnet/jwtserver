@@ -11,6 +11,7 @@ config = load_config().recaptcha_v3
 
 class Recaptcha:
     """Recaptcha v3
+    :raises HTTPException:
     https://www.google.com/recaptcha/admin/create"""
 
     def __init__(

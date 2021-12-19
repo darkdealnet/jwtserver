@@ -1,4 +1,5 @@
 from loguru import logger
+from pydantic import BaseModel
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.future import select
 from starlette import status
@@ -15,14 +16,31 @@ from jwtserver.functions.config import load_config
 config = load_config().token
 
 
-@app.post("/api/v1/auth/login/")
+class LoginResponse(BaseModel):
+    access_token: str
+    token_type: str
+
+
+@app.post("/api/v1/auth/login/", response_model=LoginResponse)
 async def login(
         response: Response,
+        session: AsyncSession = Depends(async_db_session),
+        recaptcha: Recaptcha = Depends(Recaptcha),
         telephone: str = Body(...),
         password: str = Body(...),
-        session: AsyncSession = Depends(async_db_session),
-        recaptcha: Recaptcha = Depends(Recaptcha)
 ):
+    """ docs https://jwtserver.darkdeal.net/api_v1/#login
+    :param [Response] response: fastapi response
+    :param [AsyncSession] session: Depends jwtserver.functions.session_db
+        https://jwtserver.darkdeal.net/Database/#asyncsession-class
+    :param [Recaptcha] recaptcha: Depends jwtserver.Google.Recaptcha_v3
+        https://jwtserver.darkdeal.net/Recaptcha/
+    :param str telephone: request Body(...)
+    :param str password: request Body(...)
+    :raises HTTPException: Recaptcha all raises
+    :raises HTTPException: If there is no user
+    :return dict: LoginResponse
+    """
     logger.debug(telephone, password)
     await recaptcha.set_action_name('LoginPage/LoginButton').greenlight()
     stmt = select(User).where(User.telephone == telephone)

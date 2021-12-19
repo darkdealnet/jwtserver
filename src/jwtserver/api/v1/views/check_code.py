@@ -13,11 +13,6 @@ from jwtserver.functions.init_redis import redis_conn
 smsc = SMSCRULES()
 
 
-class Data(BaseModel):
-    telephone: str
-    code: str
-
-
 class CheckCodeResponse(BaseModel):
     reg_token: str
 
