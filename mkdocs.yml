@@ -5,6 +5,9 @@ theme:
   name: material
   language: en
 
+nav:
+    - Home: index.md
+    - About: about.md
 
 extra:
   alternate:
