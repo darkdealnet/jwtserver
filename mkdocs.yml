@@ -1,4 +1,4 @@
-site_name: My Docs
+site_name: JWTServer
 site_author:
 site_description: FastAPI framework, high performance, easy to learn, fast to code, ready for production
 site_url: https://darkdealnet.github.io/jwtserver/
@@ -6,13 +6,30 @@ copyright: sdfsdffd
 repo_url: https://github.com/darkdealnet/jwtserver
 
 theme:
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.indexes
+    - toc.integrate
   name: material
+  locale: ru
+  language: ru
 
 extra:
   alternate:
     - name: English
-      link: /en/
+      link: en/
       lang: en
+    - name: Russian
+      link: ru/
+      lang: ru
+
+plugins:
+  - search:
+      lang:
+        - en
+        - ru
+
 
 markdown_extensions:
   - pymdownx.highlight:
@@ -21,4 +38,5 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+
 
