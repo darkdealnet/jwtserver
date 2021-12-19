@@ -4,9 +4,6 @@ on:
     branches: 
       - master
       - main
-    paths:
-      - "**.md"
-      - "mkdocs.yml"
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -15,5 +12,6 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: 3.x
+          configfile: 'mkdocs.yml'
       - run: pip install mkdocs-material 
       - run: mkdocs gh-deploy --force
