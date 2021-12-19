@@ -1,6 +1,6 @@
 site_name: My Docs
 site_description: FastAPI framework, high performance, easy to learn, fast to code, ready for production
-site_url: https://jwtserver.darkdeal.net/
+site_url: https://darkdealnet.github.io/jwtserver/
 theme:
   name: material
   language: en

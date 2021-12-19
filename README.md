@@ -1,5 +1,5 @@
 <p align="center">
-    <em>JWTServer is very light, fast. Simple setup.</em>
+    <em>readme.md JWTServer is very light, fast. Simple setup.</em>
 </p>
 <p align="center">
 <a href="https://pypi.org/project/jwtserver" target="_blank">
