@@ -1,13 +1,45 @@
 site_name: JWTServer
 site_author:
-site_description: FastAPI framework, high performance, easy to learn, fast to code, ready for production
-site_url: https://darkdealnet.github.io/jwtserver/
-copyright: sdfsdffd
+site_description: .....
+site_url: https://jwtserver.darkdeal.net
+copyright: author @darkdealnet
 repo_url: https://github.com/darkdealnet/jwtserver
-theme: readthedocs
+repo_name: darkdealnet/jwtserver
+theme:
+  name: material
+  language: ru
+  locale: en
+  highlightjs: true
+  hljs_languages:
+    - yaml
+    - rust
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.indexes
+    - toc.integrate
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+
 
 nav:
-  - index.md
+  - index: ru/index.md
+  - RU:
+    - ru/index.md
+    - API версия 1: ru/api_v.1/api_v1.md
+    - ru/api_v.1/recaptcha.md
+  - EN:
+      - en/index.md
+
 
 #theme:
 #  features:
@@ -19,15 +51,16 @@ nav:
 #  locale: ru
 #  language: ru
 #
-#extra:
-#  alternate:
-#    - name: English
-#      link: en/
-#      lang: en
-#    - name: Russian
-#      link: ru/
-#      lang: ru
-#
+
+extra:
+  alternate:
+    - name: Russia
+      link: /ru/
+      lang: ru
+    - name: English
+      link: /en/
+      lang: en
+
 #plugins:
 #  - search:
 #      lang:
@@ -35,12 +68,13 @@ nav:
 #        - ru
 #
 #
-#markdown_extensions:
-#  - pymdownx.highlight:
-#      anchor_linenums: true
-#  - smarty
-#  - pymdownx.inlinehilite
-#  - pymdownx.snippets
-#  - pymdownx.superfences
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - smarty
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - attr_list
 #
 #

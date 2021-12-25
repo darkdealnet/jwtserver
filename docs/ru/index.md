@@ -1,23 +1,6 @@
-# Welcome to JWTServer docs
-
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
-
-## Command
-
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
-
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
-
+# JWT server
 <p align="center">
-    <em>JWTServer is very light, fast. Simple setup.</em>
+    <em>JWTServer лёгкий и быстрый микросервис JWT.</em>
 </p>
 <p align="center">
 <a href="https://pypi.org/project/jwtserver" target="_blank">
@@ -28,112 +11,78 @@ For full documentation visit [mkdocs.org](https://www.mkdocs.org).
 </a>
 </p>
 
+JWT Server является микросервисом для авторизации пользователей. Имеющий гибкие настройки и разные версии API.
+
+## Особенности
+
+* Быстрый старт
+* Идеален для тестирование frontend
+* Спецификация JWT токенов
+* Основан на Fast API framework
+* Постоянная поддержка
+
 ---
 
-**Wiki** [https://github.com/darkdealnet/jwtserver/wiki](https://github.com/darkdealnet/jwtserver "JWTServer Wiki")
+**Документация** [https://jwtserver.darkdeal.net [↪]](https://github.com/darkdealnet/jwtserver "JWTServer Documentation")
 
-**Source Code** [https://github.com/darkdealnet/jwtserver](https://github.com/darkdealnet/jwtserver "The Fast JWTServer")
+**Поддержка кода** [https://github.com/darkdealnet/jwtserver [↪]](https://github.com/darkdealnet/jwtserver "The Fast JWTServer")
 
 ---
+
+## Зависимости
+
+* **uvicorn** [https://www.uvicorn.org/ [↪]](https://www.uvicorn.org/)
+* **fastapi** [https://fastapi.tiangolo.com/ [↪]](https://fastapi.tiangolo.com/)
+* **starlette** [https://www.starlette.io/ [↪]](https://www.starlette.io/)
+* **passlib** [https://pypi.org/project/passlib/ [↪]](https://pypi.org/project/passlib/)
+* **pydantic** [https://pydantic-docs.helpmanual.io/ [↪]](https://pydantic-docs.helpmanual.io/)
+* **aioredis** [https://aioredis.readthedocs.io/ [↪]](https://aioredis.readthedocs.io/)
+* **python-jose** [https://pypi.org/project/python-jose/ [↪]](https://pypi.org/project/python-jose/)
+* **sqlalchemy** [https://pypi.org/project/SQLAlchemy/ [↪]](https://pypi.org/project/SQLAlchemy/)
+* **sqlalchemy_utils** [https://sqlalchemy-utils.readthedocs.io/ [↪]](https://sqlalchemy-utils.readthedocs.io/)
+* **asyncpg** [https://pypi.org/project/asyncpg/ [↪]](https://pypi.org/project/asyncpg/)
+* **psycopg2-binary** [https://pypi.org/project/psycopg2-binary/ [↪]](https://pypi.org/project/psycopg2-binary/)
+* **httpx** [https://www.python-httpx.org/ [↪]](https://www.python-httpx.org/)
+* **phonenumbers** [https://pypi.org/project/phonenumbers/ [↪]](https://pypi.org/project/phonenumbers/)
+
+## Установка
 
 ```shell
-pip install jwtserver
+python -m pip install jwtserver 
 ```
 
-### start development server
-This project can make life easier for front-end development, or it can act as a full-fledged
-authorization microservice based on tokens.
+## Примеры:
+
+### Для разработки
+
+* создайте файл `dev.py`
 
 ```python
-# dev.py
 from jwtserver.server import dev
 
 if __name__ == "__main__":
     dev(host="localhost", port=5000, log_level="info")
 ```
 
-### production server
+### Интерактивная API документация
+
+откройте _Interactive API docs_ [http://localhost:5000/docs [↪]](http://localhost:5000/docs){target=_blank}
+
+Вы увидите автоматическую интерактивную документацию по API.
+
+### Альтернативная API документация
+
+откройте _Alternative  API redoc_ [http://localhost:5000/redoc [↪]](http://localhost:5000/redoc){target=_blank}
+
+### Для продукции
+
+* создайте файл `main.py`
 
 ```python
-# main.py
 from jwtserver.app import app
 
 app.debug = False
 ```
 
-### system.d
-
-```ini
-# jwtserver.service
-[Unit]
-Description = jwtserver daemon
-After = network.target
-
-[Service]
-User = {username}
-Group = {username_group}
-WorkingDirectory = /home/{username}/{project_folder}/jwtserver
-ExecStart = /home/{username}/.venvs/jwtserver/bin/gunicorn -c jwtserver/functions/gunicorn.py main:app
-Restart = on-failure
-
-[Install]
-WantedBy = multi-user.target
-```
-
-In the root of the project, you need to create a **config.ini** file. If you omit any sections or
-keys, they will be replaced with default values.
-
-```ini
-[server]
-debug = True
-clear_redis_before_send_code = True
-host = 0.0.0.0
-port = 8000
-max_requests = 1000
-
-[token]
-;additional salt to make it harder to crack the token
-sol = 1234567890987654321
-
-;minutes
-access_expire_time = 90
-refresh_expire_time = 10800
-
-;jwt algorithm, decode or encode token.
-algorithm = HS256
-;secret key for algorithm
-secret_key =
-
-[db]
-sync_url =
-async_url =
-sync_test_url =
-async_test_url =
-
-[redis]
-url = redis://localhost
-max_connections = 10
-
-[recaptcha_v3]
-;secret key for RecaptchaV3
-secret_key =
-;the score for this request (0.0 - 1.0)
-;minimal score
-score = 0.7
-
-[sms]
-;if debug, then there is an imitation of sending SMS messages.
-debug = True
-
-;sms provider, example smsc.en
-provider = smsc
-
-;class responsible for the logic of sending SMS and calls
-init_class = jwtserver.functions.SMSC
-login =
-password =
-
-;blocking time before resending
-time_sms = 120
-time_call = 90
-```
+## Лицензия
+Этот проект находится под лицензией Apache 2.0.

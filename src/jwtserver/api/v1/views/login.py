@@ -24,20 +24,20 @@ class LoginResponse(BaseModel):
 @app.post("/api/v1/auth/login/", response_model=LoginResponse)
 async def login(
         response: Response,
-        session: AsyncSession = Depends(async_db_session),
         recaptcha: Recaptcha = Depends(Recaptcha),
+        session: AsyncSession = Depends(async_db_session),
         telephone: str = Body(...),
         password: str = Body(...),
 ):
     """ docs https://jwtserver.darkdeal.net/api_v1/#login
     :param [Response] response: fastapi response
+    :param [recaptcha.md] recaptcha: Depends jwtserver.Google.Recaptcha_v3
+        https://jwtserver.darkdeal.net/Recaptcha/
     :param [AsyncSession] session: Depends jwtserver.functions.session_db
         https://jwtserver.darkdeal.net/Database/#asyncsession-class
-    :param [Recaptcha.md] recaptcha: Depends jwtserver.Google.Recaptcha_v3
-        https://jwtserver.darkdeal.net/Recaptcha/
     :param str telephone: request Body(...)
     :param str password: request Body(...)
-    :raises HTTPException: Recaptcha.md all raises
+    :raises HTTPException: recaptcha.md all raises
     :raises HTTPException: If there is no user
     :return dict: LoginResponse
     """

@@ -1,0 +1,9 @@
+# Hello, choose a language
+<p align="left">
+    <a href="ru">
+        <img src="img.png" style="height: 150px;"/>
+    </a>
+    <a href="en">
+        <img src="img_1.png" style="height: 150px;"/>
+    </a>
+</p>
