@@ -7,7 +7,7 @@
 
 `jwtserver.api.v1.views.login.py`
 
-Read more [here](./src/jwtserver.api.v1.views.login.py)
+Read more [here](./src/jwtserver/api/v1/views/login.py)
 
 Самая важная часть нашего API - это авторизация пользователя, наша задача - получить логин и пароль,
 вернуть токен доступа и установить токен обновления в cookie.
