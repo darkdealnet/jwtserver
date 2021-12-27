@@ -8,7 +8,7 @@ repo_name: darkdealnet/jwtserver
 theme:
   name: material
   language: ru
-  locale: en
+  locale: ru
   highlightjs: true
   hljs_languages:
     - yaml
@@ -18,6 +18,9 @@ theme:
     - navigation.tabs.sticky
     - navigation.indexes
     - toc.integrate
+#  hide:
+#    - navigation
+#    - toc
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -33,14 +36,14 @@ theme:
 extra_css:
   - css/custom.css
 
-nav:
-  - index: ru/index.md
-  - RU:
-      - ru/index.md
-      - API версия 1: ru/api_v.1/api_v1.md
-      - ru/api_v.1/recaptcha.md
-  - EN:
-      - en/index.md
+#nav:
+#  - index: ru/api_v1.md
+#  - RU:
+#      - ru/api_v1.md
+#      - API версия 1: ru/API_v1/api_v1.md
+#      - ru/API_v1/recaptcha_v3.md
+#  - EN:
+#      - en/api_v1.md
 
 
 #theme:
@@ -71,6 +74,8 @@ extra:
 #
 #
 markdown_extensions:
+  - mdx_include:
+      base_path: ''
   - pymdownx.highlight:
       anchor_linenums: true
   - smarty

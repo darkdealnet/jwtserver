@@ -11,31 +11,37 @@ from pydantic import BaseModel
 
 smsc = SMSCRULES()
 config_server = load_config().server
+config_sms = load_config().sms
 
 
 class Data(BaseModel):
     telephone: str
 
 
-@app.post("/api/v1/auth/send_code/")
+class ResponseModel(BaseModel):
+    send: bool
+    time: int
+    method: str
+
+
+@app.post("/api/v1/auth/send_code/", response_model=ResponseModel)
 async def call_code(data: Data, redis: Redis = Depends(redis_conn), ):
     """Последние цифры номер это код"""
-
-    if config_server.clear_redis_before_send_code:
+    if config_sms.ignore_attempts:
         await redis.delete(f"{data.telephone}_try_count")
 
     try_count = await redis.incr(f"{data.telephone}_try_count")
     block_ttl = await redis.ttl(f"{data.telephone}_try_count")
     code_is_send = await redis.get(data.telephone)
 
-    if try_count < 2:
+    if try_count <= config_sms.try_call:
         method_func = smsc.call
         next_method_name = "call"
     else:
         method_func = smsc.send_sms
         next_method_name = "sms"
 
-    if try_count < 4:
+    if try_count < (config_sms.try_call + config_sms.try_sms):
         if code_is_send:
             code, method = code_is_send.decode('ascii').split(":")
 
@@ -48,7 +54,7 @@ async def call_code(data: Data, redis: Redis = Depends(redis_conn), ):
             return {"send": False}
 
         await redis.set(data.telephone, f"{code}:{next_method_name}", time)
-        await redis.expire(f"{data.telephone}_try_count", 60 * 60 * 3)
+        await redis.expire(f"{data.telephone}_try_count", config_sms.block_time_minutes)
         return {"send": True, "method": next_method_name, "time": time}
     else:
         if not code_is_send:

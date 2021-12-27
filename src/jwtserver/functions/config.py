@@ -28,13 +28,17 @@ class RedisConfig(BaseModel):
     max_connections: int
 
 
-class Recaptcha_v3Config(BaseModel):
+class Google(BaseModel):
     secret_key: str
     score: float
 
 
 class SMSConfig(BaseModel):
     debug = True
+    ignore_attempts: bool
+    try_call: int
+    try_sms: int
+    block_time_minutes: int
     provider: str
     init_class: str
     login: str
@@ -48,7 +52,6 @@ class ServerConfig(BaseModel):
     port: str
     max_requests: int
     debug: bool
-    clear_redis_before_send_code: bool
 
 
 class Config(BaseModel):
@@ -56,7 +59,7 @@ class Config(BaseModel):
     token: TokenConfig
     db: DbConfig
     redis: RedisConfig
-    recaptcha_v3: Recaptcha_v3Config
+    recaptcha_v3: Google
     sms: SMSConfig
 
 

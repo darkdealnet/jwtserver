@@ -13,7 +13,7 @@ from jwtserver.functions.session_db import async_db_session
 from jwtserver.models import User
 from jwtserver.functions.config import load_config
 
-config = load_config().token
+token_config = load_config().token
 
 
 class LoginResponse(BaseModel):
@@ -29,15 +29,15 @@ async def login(
         telephone: str = Body(...),
         password: str = Body(...),
 ):
-    """ docs https://jwtserver.darkdeal.net/api_v1/#login
+    """ docs http://127.0.0.1:8000/ru/api_v1/#_1
     :param [Response] response: fastapi response
-    :param [recaptcha.md] recaptcha: Depends jwtserver.Google.Recaptcha_v3
+    :param [recaptcha_v3.md] recaptcha: Depends jwtserver.Google.Recaptcha_v3
         https://jwtserver.darkdeal.net/Recaptcha/
     :param [AsyncSession] session: Depends jwtserver.functions.session_db
         https://jwtserver.darkdeal.net/Database/#asyncsession-class
     :param str telephone: request Body(...)
     :param str password: request Body(...)
-    :raises HTTPException: recaptcha.md all raises
+    :raises HTTPException: recaptcha_v3.md all raises
     :raises HTTPException: If there is no user
     :return dict: LoginResponse
     """
@@ -66,7 +66,7 @@ async def login(
             value=refresh_token,
             httponly=True,
             secure=True,
-            max_age=config.refresh_expire_time * 60)
+            max_age=token_config.refresh_expire_time * 60)
 
         logger.debug({"access_token": access_token, "token_type": "JSv1"})
         return {"access_token": access_token, "token_type": "JSv1"}

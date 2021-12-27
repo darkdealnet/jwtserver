@@ -1,3 +1,5 @@
+from typing import Optional
+
 import aioredis.exceptions
 from aioredis import Redis
 from fastapi import Depends, Body
@@ -16,7 +18,14 @@ class Data(BaseModel):
     telephone: str
 
 
-@app.post("/api/v1/auth/phone_status/")
+class ResponseModel(BaseModel):
+    free: bool
+    telephone: str
+    sent: Optional[bool]
+    time: Optional[int]
+
+
+@app.post("/api/v1/auth/phone_status/", response_model=ResponseModel)
 async def phone_status(
         telephone: str = Body(...),
         redis: Redis = Depends(redis_conn),

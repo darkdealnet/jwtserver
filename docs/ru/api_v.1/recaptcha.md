@@ -1,3 +1,0 @@
-# Recaptcha
-
-dfsfds
