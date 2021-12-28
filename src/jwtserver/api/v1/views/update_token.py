@@ -37,7 +37,7 @@ async def get_current_active_user(Authorization: str = Header(...),
 
 
 # @app.post("/api/v1/auth/reg_user", response_model=schemas.TokenPD)
-@app.get("/api/v1/auth/update_token/")
+@app.get("/api/v1/auth/update_token/", tags=["Authorization"])
 async def refresh_new_access_token(
         response: Response,
         Authorization: str = Header(...),

@@ -15,13 +15,19 @@ from jwtserver.functions.config import load_config
 
 token_config = load_config().token
 
+response_description = """
+There will also be response set_cookie refresh_token.
+"""
+
 
 class LoginResponse(BaseModel):
     access_token: str
     token_type: str
 
 
-@app.post("/api/v1/auth/login/", response_model=LoginResponse)
+@app.post("/api/v1/auth/login/", response_model=LoginResponse, tags=["Authorization"],
+          description="User authorization by login and password",
+          response_description=response_description)
 async def login(
         response: Response,
         recaptcha: Recaptcha = Depends(Recaptcha),
@@ -29,17 +35,17 @@ async def login(
         telephone: str = Body(...),
         password: str = Body(...),
 ):
-    """ docs http://127.0.0.1:8000/ru/api_v1/#_1
-    :param [Response] response: fastapi response
-    :param [recaptcha_v3.md] recaptcha: Depends jwtserver.Google.Recaptcha_v3
-        https://jwtserver.darkdeal.net/Recaptcha/
-    :param [AsyncSession] session: Depends jwtserver.functions.session_db
-        https://jwtserver.darkdeal.net/Database/#asyncsession-class
-    :param str telephone: request Body(...)
-    :param str password: request Body(...)
+    """docs https://jwtserver.darkdeal.net/en/api_v1/#login
+    :param response: Fastapi response
+    :param recaptcha: Depends jwtserver.Google.Recaptcha_v3
+        https://jwtserver.darkdeal.net/en/recaptcha_v3/
+    :param session: Depends jwtserver.functions.session_db
+        https://jwtserver.darkdeal.net/en/database/
+    :param telephone: international phone number format
+    :param password: string
     :raises HTTPException: recaptcha_v3.md all raises
     :raises HTTPException: If there is no user
-    :return dict: LoginResponse
+    :return LoginResponse
     """
     logger.debug(telephone, password)
     await recaptcha.set_action_name('LoginPage/LoginButton').greenlight()

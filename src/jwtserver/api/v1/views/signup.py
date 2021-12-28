@@ -22,7 +22,7 @@ class Data(BaseModel):
 
 
 # @app.post("/api/v1/auth/reg_user", response_model=schemas.TokenPD, status_code=HTTP_201_CREATED)
-@app.post("/api/v1/auth/signup/")
+@app.post("/api/v1/auth/signup/", tags=["Registration"])
 async def reg_user(
         response: Response,
         data: Data = None,

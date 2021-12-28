@@ -17,7 +17,7 @@ class CheckCodeResponse(BaseModel):
     reg_token: str
 
 
-@app.post("/api/v1/auth/check_code/", response_model=CheckCodeResponse)
+@app.post("/api/v1/auth/check_code/", response_model=CheckCodeResponse, tags=["Registration"])
 async def check_code(
         telephone: str = Body(...),
         code: int = Body(...),

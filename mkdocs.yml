@@ -8,7 +8,6 @@ repo_name: darkdealnet/jwtserver
 theme:
   name: material
   language: ru
-  locale: ru
   highlightjs: true
   hljs_languages:
     - yaml

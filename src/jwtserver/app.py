@@ -10,9 +10,32 @@ origins = [
     "http://localhost:5000",
     "http://localhost:3000",
 ]
+description = """[Full JWT Server docs](https://jwtserver.darkdeal.net)"""
+
+tags_metadata = [
+    {
+        "name": "Authorization",
+        "description": "authorization",
+    },
+    {
+        "name": "Registration",
+        "description": "registration",
+        "externalDocs": {
+            "description": "Items external docs",
+            "url": "https://jwtserver.darkdeal.net/ru/api_v1/",
+        },
+    },
+]
 
 app = FastAPI(
-    title="JWT server"
+    title="JWT server",
+    description=description,
+    version="0.0.8",
+    license_info={
+        "name": "Apache 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
+    },
+    openapi_tags=tags_metadata
 )
 app.add_middleware(
     CORSMiddleware,

@@ -24,7 +24,7 @@ class ResponseModel(BaseModel):
     method: str
 
 
-@app.post("/api/v1/auth/send_code/", response_model=ResponseModel)
+@app.post("/api/v1/auth/send_code/", response_model=ResponseModel, tags=["Registration"])
 async def call_code(data: Data, redis: Redis = Depends(redis_conn), ):
     """Последние цифры номер это код"""
     if config_sms.ignore_attempts:
