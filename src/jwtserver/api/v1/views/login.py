@@ -20,30 +20,32 @@ There will also be response set_cookie refresh_token.
 """
 
 
-class LoginResponse(BaseModel):
+class LoginResponseModel(BaseModel):
     access_token: str
     token_type: str
 
 
-@app.post("/api/v1/auth/login/", response_model=LoginResponse, tags=["Authorization"],
+@app.post("/api/v1/auth/login/",
+          response_model=LoginResponseModel,
+          tags=["Authorization"],
           description="User authorization by login and password",
-          response_description=response_description)
+          response_description=response_description
+          )
 async def login(
         response: Response,
         recaptcha: Recaptcha = Depends(Recaptcha),
         session: AsyncSession = Depends(async_db_session),
         telephone: str = Body(...),
-        password: str = Body(...),
+        password: str = Body(...)
 ):
-    """docs https://jwtserver.darkdeal.net/en/api_v1/#login
+    """
+    More here https://jwtserver.darkdeal.net/en/api_v1/#login
     :param response: Fastapi response
-    :param recaptcha: Depends jwtserver.Google.Recaptcha_v3
-        https://jwtserver.darkdeal.net/en/recaptcha_v3/
-    :param session: Depends jwtserver.functions.session_db
-        https://jwtserver.darkdeal.net/en/database/
+    :param recaptcha: https://jwtserver.darkdeal.net/en/recaptcha_v3/
+    :param session: https://jwtserver.darkdeal.net/en/database/
     :param telephone: international phone number format
     :param password: string
-    :raises HTTPException: recaptcha_v3.md all raises
+    :raises HTTPException: recaptcha_v3 raises
     :raises HTTPException: If there is no user
     :return LoginResponse
     """

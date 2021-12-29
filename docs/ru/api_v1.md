@@ -7,6 +7,7 @@
 * [/api/v1/auth/login/](#_1) - авторизация.
 * [/api/v1/auth/logout/](#_5) - уничтожение токенов.
 * [/api/v1/auth/update_token/](#_7) - регистрация пользователя.
+
 ### Registration
 * [/api/v1/auth/phone_status/](#_2) - проверка, доступен ли номер.
 * [/api/v1/auth/send_code/](#_3) - звонок или смс.

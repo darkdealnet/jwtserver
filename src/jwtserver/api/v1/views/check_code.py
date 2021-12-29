@@ -13,11 +13,11 @@ from jwtserver.functions.init_redis import redis_conn
 smsc = SMSCRULES()
 
 
-class CheckCodeResponse(BaseModel):
+class CheckCodeResponseModel(BaseModel):
     reg_token: str
 
 
-@app.post("/api/v1/auth/check_code/", response_model=CheckCodeResponse, tags=["Registration"])
+@app.post("/api/v1/auth/check_code/", response_model=CheckCodeResponseModel, tags=["Registration"])
 async def check_code(
         telephone: str = Body(...),
         code: int = Body(...),

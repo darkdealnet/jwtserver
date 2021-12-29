@@ -14,16 +14,19 @@ from jwtserver.functions.session_db import async_db_session
 
 config_token = load_config().token
 
+response_description = """
+Update access_token and refresh_token
+"""
 
-class Data(BaseModel):
+
+class UpdateTokenResponseModel(BaseModel):
     access_token: str
 
-    class Config:
-        orm_mode = True
 
-
-async def get_current_active_user(Authorization: str = Header(...),
-                                  session: AsyncSession = Depends(async_db_session)):
+async def get_current_active_user(
+        Authorization: str = Header(...),
+        session: AsyncSession = Depends(async_db_session)
+):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="User is inactive",
@@ -36,14 +39,25 @@ async def get_current_active_user(Authorization: str = Header(...),
     return user
 
 
-# @app.post("/api/v1/auth/reg_user", response_model=schemas.TokenPD)
-@app.get("/api/v1/auth/update_token/", tags=["Authorization"])
-async def refresh_new_access_token(
+@app.get("/api/v1/auth/update_token/",
+         tags=["Authorization"],
+         response_model=UpdateTokenResponseModel,
+         response_description=response_description)
+async def update_token(
         response: Response,
         Authorization: str = Header(...),
         refresh_token: Optional[str] = Cookie(None),
-        current_user: User = Depends(get_current_active_user),
+        current_active_user: User = Depends(get_current_active_user),
 ):
+    """
+    More here https://jwtserver.darkdeal.net/en/api_v1/update-token/
+    :param response: Fastapi response
+    :param Authorization: 'token_type access_token'
+    :param refresh_token: from cookie
+    :param current_active_user: Depends on get_current_active_user
+    :raises HTTPException: If user is not active
+    :return: UpdateTokenResponseModel
+    """
     token = TokenProcessor(access_token=Authorization.split()[1], refresh_token=refresh_token)
     payload_access_untested = token.payload_token_untested('access')
     payload_refresh_token = token.payload_token('refresh')
@@ -55,7 +69,7 @@ async def refresh_new_access_token(
             return {"error": "invalid pair of tokens"}
 
         if _secret_full == secret(payload_access_untested['uuid'], payload_access_untested['exp']):
-            access_token, refresh_token = token.create_pair_tokens(current_user.uuid.hex)
+            access_token, refresh_token = token.create_pair_tokens(current_active_user.uuid.hex)
 
             response.set_cookie(
                 key='refresh_token',
@@ -64,6 +78,6 @@ async def refresh_new_access_token(
                 secure=True,
                 max_age=config_token.refresh_expire_time * 60)
 
-            return {"access_token": access_token, "token_type": "JSv1"}
+            return {"access_token": access_token}
     except AttributeError:
         return {"error": "token won't find"}

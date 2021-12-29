@@ -11,7 +11,6 @@ from loguru import logger
 from base64 import b64decode
 from json import loads
 from datetime import datetime, timedelta
-from jwtserver.schemas import UserPD
 from jwtserver.functions.config import load_config
 
 cfg = load_config().token

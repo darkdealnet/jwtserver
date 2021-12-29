@@ -22,7 +22,7 @@ tags_metadata = [
         "description": "registration",
         "externalDocs": {
             "description": "Items external docs",
-            "url": "https://jwtserver.darkdeal.net/ru/api_v1/",
+            "url": "https://jwtserver.darkdeal.net/en/api_v1/",
         },
     },
 ]
