@@ -5,6 +5,7 @@ __all__ = ['app']
 
 from jwtserver import __version__
 
+
 origins = [
     "http://localhost",
     "http://localhost:8080",
