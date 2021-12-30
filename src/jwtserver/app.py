@@ -3,6 +3,8 @@ from starlette.middleware.cors import CORSMiddleware
 
 __all__ = ['app']
 
+from jwtserver import __version__
+
 origins = [
     "http://localhost",
     "http://localhost:8080",
@@ -30,7 +32,7 @@ tags_metadata = [
 app = FastAPI(
     title="JWT server",
     description=description,
-    version="0.0.8",
+    version=__version__,
     license_info={
         "name": "Apache 2.0",
         "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
