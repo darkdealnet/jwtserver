@@ -26,6 +26,7 @@ JWT Server является микросервисом для авторизац
 ## Зависимости
 
 * **uvicorn** [https://www.uvicorn.org/](https://www.uvicorn.org/ "Go Site"){target=_blank, class="external-link"}
+* <a href=https://www.uvicorn.org/ target="_blank">https://www.uvicorn.org/</a>
 * **fastapi** [https://fastapi.tiangolo.com/](https://fastapi.tiangolo.com/ "Go Site"){target=_blank, class="external-link"}
 * **starlette** [https://www.starlette.io/](https://www.starlette.io/ "Go Site"){target=_blank, class="external-link"}
 * **passlib** [https://pypi.org/project/passlib/](https://pypi.org/project/passlib/ "Go Site"){target=_blank, class="external-link"}
