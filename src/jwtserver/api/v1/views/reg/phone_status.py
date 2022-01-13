@@ -25,7 +25,7 @@ class ResponseModel(BaseModel):
     time: Optional[int]
 
 
-@app.post("/api/v1/auth/phone_status/", response_model=ResponseModel, tags=["Registration"])
+@app.post("/api/v1/phone_status/", response_model=ResponseModel, tags=["Registration"])
 async def phone_status(
         telephone: str = Body(...),
         redis: Redis = Depends(redis_conn),
@@ -46,4 +46,5 @@ async def phone_status(
     if code_is_send:
         ttl = await redis.ttl(telephone)
         return {"free": True, "telephone": telephone, "sent": True, "time": ttl}
+
     return {"free": True, "telephone": telephone}

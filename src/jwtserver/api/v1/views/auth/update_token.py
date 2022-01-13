@@ -14,10 +14,6 @@ from jwtserver.functions.session_db import async_db_session
 
 config_token = load_config().token
 
-response_description = """
-Update access_token and refresh_token
-"""
-
 
 class UpdateTokenResponseModel(BaseModel):
     access_token: str
@@ -39,10 +35,11 @@ async def get_current_active_user(
     return user
 
 
-@app.get("/api/v1/auth/update_token/",
+@app.get("/api/v1/update_token/",
          tags=["Authorization"],
          response_model=UpdateTokenResponseModel,
-         response_description=response_description)
+         description="Update access_token and refresh_token",
+         response_description="refresh_token set cookie")
 async def update_token(
         response: Response,
         Authorization: str = Header(...),

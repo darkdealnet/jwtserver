@@ -1,5 +1,5 @@
 """JWTServer is a lightweight and fast JWT microservice."""
-__version__ = '0.0.10'
+__version__ = '0.0.14'
 
 from .app import app as app
 from .server import dev as dev

@@ -9,6 +9,7 @@ from jwtserver.app import app
 from jwtserver.functions.config import load_config
 from pydantic import BaseModel
 
+
 smsc = SMSCRULES()
 config_server = load_config().server
 config_sms = load_config().sms
@@ -18,13 +19,17 @@ class Data(BaseModel):
     telephone: str
 
 
-class ResponseModel(BaseModel):
+class ResponseSendCodeModel(BaseModel):
     send: bool
     time: int
     method: str
 
 
-@app.post("/api/v1/auth/send_code/", response_model=ResponseModel, tags=["Registration"])
+@app.post("/api/v1/send_code/",
+          response_model=ResponseSendCodeModel,
+          tags=["Registration"],
+          description="Sending a code through a call or SMS",
+          )
 async def call_code(data: Data, redis: Redis = Depends(redis_conn), ):
     """Последние цифры номер это код"""
     if config_sms.ignore_attempts:
@@ -43,7 +48,8 @@ async def call_code(data: Data, redis: Redis = Depends(redis_conn), ):
 
     if try_count < (config_sms.try_call + config_sms.try_sms):
         if code_is_send:
-            code, method = code_is_send.decode('ascii').split(":")
+            # code, method = code_is_send.decode('ascii').split(":")
+            code, method = code_is_send.split(":")
 
             ttl = await redis.ttl(data.telephone)
             logger.info("code is send")
@@ -63,7 +69,8 @@ async def call_code(data: Data, redis: Redis = Depends(redis_conn), ):
                 detail={"error": "Превышен лимит запросов", 'block_time': block_ttl}
             )
 
-        code, method = code_is_send.decode('ascii').split(":")
+        # code, method = code_is_send.decode('ascii').split(":")
+        code, method = code_is_send.split(":")
         ttl = await redis.ttl(data.telephone)
         logger.info("code is send")
         return {"send": True, "time": ttl, "method": method}

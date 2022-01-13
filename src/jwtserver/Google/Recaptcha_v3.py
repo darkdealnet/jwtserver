@@ -1,7 +1,6 @@
-from typing import Literal
-
-from loguru import logger
 import httpx
+from typing import Literal
+from loguru import logger
 from fastapi import HTTPException, Body
 from starlette import status
 from jwtserver.functions.config import load_config

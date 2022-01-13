@@ -1,10 +1,14 @@
-from jwtserver.database import (
-    AsyncSessionLocal,
-)
-from sqlalchemy.ext.asyncio import AsyncSession
+from jwtserver.database import AsyncSessionLocal
 
 
-async def async_db_session() -> AsyncSession:
+# async def async_db_session():
+#     """Databases pool fabric connection, auto close connection"""
+#     async with AsyncSessionLocal() as session:
+#         yield session
+async def async_db_session():
     """Databases pool fabric connection, auto close connection"""
-    async with AsyncSessionLocal() as session:
-        yield session
+    try:
+        db = AsyncSessionLocal()
+        yield db
+    finally:
+        db.close()

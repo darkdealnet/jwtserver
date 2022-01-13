@@ -28,7 +28,7 @@ setuptools.setup(
     name='jwtserver',
     author='Darkdeal',
     version=get_version("src/jwtserver/__init__.py"),
-    author_email='real@darkedal.net',
+    author_email='real@darkdeal.net',
     description='jwt authorization server',
     long_description=long_description,
     long_description_content_type='text/markdown',

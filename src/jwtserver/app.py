@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-
+from loguru import logger
 __all__ = ['app']
 
 from jwtserver import __version__
 
-
+# logger.disable('123')
 origins = [
     "http://localhost",
     "http://localhost:8080",

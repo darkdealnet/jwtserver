@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:14.1-alpine
+    environment:
+      POSTGRES_DB: "jwtserver-tests"
+      POSTGRES_USER: "jwtserver"
+      POSTGRES_PASSWORD: "jwtserver-password"
+    ports:
+      - "5433:5432"
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6380:6379"

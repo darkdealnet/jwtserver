@@ -17,28 +17,26 @@ JWT Server является микросервисом для авторизац
 
 ---
 
-**Документация** [https://jwtserver.darkdeal.net](https://github.com/darkdealnet/jwtserver "JWTServer Documentation"){target=_blank, class="external-link"}
+**Документация** <a href="https://jwtserver.darkdeal.net/" target="_blank">https://jwtserver.darkdeal.net/</a>
 
-**Поддержка кода** [https://github.com/darkdealnet/jwtserver](https://github.com/darkdealnet/jwtserver "The JWTServer"){target=_blank, class="external-link"}
+**Поддержка кода** <a href="https://github.com/darkdealnet/jwtserver" target="_blank">https://github.com/darkdealnet/jwtserver</a>
 
 ---
 
 ## Зависимости
 
-* **uvicorn** [https://www.uvicorn.org/](https://www.uvicorn.org/ "Go Site"){target=_blank, class="external-link"}
-* <a href=https://www.uvicorn.org/ target="_blank">https://www.uvicorn.org/</a>
-* **fastapi** [https://fastapi.tiangolo.com/](https://fastapi.tiangolo.com/ "Go Site"){target=_blank, class="external-link"}
-* **starlette** [https://www.starlette.io/](https://www.starlette.io/ "Go Site"){target=_blank, class="external-link"}
-* **passlib** [https://pypi.org/project/passlib/](https://pypi.org/project/passlib/ "Go Site"){target=_blank, class="external-link"}
-* **pydantic** [https://pydantic-docs.helpmanual.io/](https://pydantic-docs.helpmanual.io/ "Go Site"){target=_blank, class="external-link"}
-* **aioredis** [https://aioredis.readthedocs.io/](https://aioredis.readthedocs.io/ "Go Site"){target=_blank, class="external-link"}
-* **python-jose** [https://pypi.org/project/python-jose/](https://pypi.org/project/python-jose/ "Go Site"){target=_blank, class="external-link"}
-* **sqlalchemy** [https://pypi.org/project/SQLAlchemy/](https://pypi.org/project/SQLAlchemy/ "Go Site"){target=_blank, class="external-link"}
-* **sqlalchemy_utils** [https://sqlalchemy-utils.readthedocs.io/](https://sqlalchemy-utils.readthedocs.io/ "Go Site"){target=_blank, class="external-link"}
-* **asyncpg** [https://pypi.org/project/asyncpg/](https://pypi.org/project/asyncpg/ "Go Site"){target=_blank, class="external-link"}
-* **psycopg2-binary** [https://pypi.org/project/psycopg2-binary/](https://pypi.org/project/psycopg2-binary/ "Go Site"){target=_blank, class="external-link"}
-* **httpx** [https://www.python-httpx.org/](https://www.python-httpx.org/ "Go Site"){target=_blank, class="external-link"}
-* **phonenumbers** [https://pypi.org/project/phonenumbers/](https://pypi.org/project/phonenumbers/ "Go Site"){target=_blank, class="external-link"}
+* **uvicorn** <a href="https://www.uvicorn.org/" target="_blank" class="external-link">https://www.uvicorn.org/</a>
+* **fastapi** <a href="https://fastapi.tiangolo.com/" target="_blank" class="external-link">https://fastapi.tiangolo.com/</a>
+* **starlette** <a href="https://www.starlette.io/" target="_blank" class="external-link">https://www.starlette.io/</a>
+* **passlib** <a href="https://pypi.org/project/passlib/" target="_blank" class="external-link">https://pypi.org/project/passlib/</a>
+* **pydantic** <a href="https://pydantic-docs.helpmanual.io/" target="_blank" class="external-link">https://pydantic-docs.helpmanual.io/</a>
+* **aioredis** <a href="https://aioredis.readthedocs.io/" target="_blank" class="external-link">https://aioredis.readthedocs.io/</a>
+* **python-jose** <a href="https://pypi.org/project/python-jose/" target="_blank" class="external-link">https://pypi.org/project/python-jose/</a>
+* **sqlalchemy** <a href="https://pypi.org/project/SQLAlchemy/" target="_blank" class="external-link">https://pypi.org/project/SQLAlchemy/</a>
+* **sqlalchemy_utils** <a href="https://sqlalchemy-utils.readthedocs.io/" target="_blank" class="external-link">https://sqlalchemy-utils.readthedocs.io/</a>
+* **asyncpg** <a href="https://pypi.org/project/asyncpg/" target="_blank" class="external-link">https://pypi.org/project/asyncpg/</a>
+* **psycopg2-binary** <a href="https://pypi.org/project/psycopg2-binary/" target="_blank" class="external-link">https://pypi.org/project/psycopg2-binary/</a>
+* **httpx** <a href="https://www.python-httpx.org/" target="_blank" class="external-link">https://www.python-httpx.org/</a>
 
 ## Установка
 
@@ -61,13 +59,13 @@ if __name__ == "__main__":
 
 ### Интерактивная API документация
 
-откройте _Interactive API docs_ [http://localhost:5000/docs](http://localhost:5000/docs "Go Site"){target=_blank, class="external-link"}
+откройте _Interactive API docs_ <a href="http://localhost:5000/docs" target="_blank" class="external-link">http://localhost:5000/docs</a>
 
 Вы увидите автоматическую интерактивную документацию по API.
 
 ### Альтернативная API документация
 
-откройте _Alternative  API redoc_ [http://localhost:5000/redoc](http://localhost:5000/redoc "Go Site"){target=_blank, class="external-link"}
+откройте _Alternative  API redoc_ <a href="http://localhost:5000/redoc" target="_blank" class="external-link">http://localhost:5000/redoc</a>
 
 ### Для продукции
 

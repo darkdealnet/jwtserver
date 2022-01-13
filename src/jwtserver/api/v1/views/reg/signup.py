@@ -2,6 +2,7 @@ from aioredis import Redis
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from starlette.status import HTTP_201_CREATED
 
 from jwtserver.api.v1.help_func.ParseToken import TokenProcessor
 from jwtserver.models import User
@@ -21,8 +22,17 @@ class Data(BaseModel):
     reg_token: str
 
 
+class AccessTokenResponseModel(BaseModel):
+    access_token: str
+    token_type: str
+
+
 # @app.post("/api/v1/auth/reg_user", response_model=schemas.TokenPD, status_code=HTTP_201_CREATED)
-@app.post("/api/v1/auth/signup/", tags=["Registration"])
+@app.post("/api/v1/signup/",
+          tags=["Registration"],
+          response_model=AccessTokenResponseModel,
+          description="Registration user by login and password",
+          status_code=HTTP_201_CREATED)
 async def reg_user(
         response: Response,
         data: Data = None,
@@ -53,4 +63,4 @@ async def reg_user(
                 httponly=True,
                 secure=True,
                 max_age=config.refresh_expire_time * 60)
-            return {"access_token": access_token, "token_type": "bearer"}
+            return {"access_token": access_token, "token_type": "JSv1"}

@@ -3,6 +3,8 @@ from pydantic import BaseModel
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.future import select
 from starlette import status
+
+from jwtserver import crud
 from jwtserver.api.v1.help_func.ParseToken import TokenProcessor
 from jwtserver.Google.Recaptcha_v3 import Recaptcha
 from jwtserver.app import app
@@ -25,16 +27,15 @@ class LoginResponseModel(BaseModel):
     token_type: str
 
 
-@app.post("/api/v1/auth/login/",
+@app.post("/api/v1/login/",
           response_model=LoginResponseModel,
           tags=["Authorization"],
           description="User authorization by login and password",
-          response_description=response_description
+          response_description=response_description,
           )
 async def login(
         response: Response,
         recaptcha: Recaptcha = Depends(Recaptcha),
-        session: AsyncSession = Depends(async_db_session),
         telephone: str = Body(...),
         password: str = Body(...)
 ):
@@ -42,21 +43,17 @@ async def login(
     More here https://jwtserver.darkdeal.net/en/api_v1/#login
     :param response: Fastapi response
     :param recaptcha: https://jwtserver.darkdeal.net/en/recaptcha_v3/
-    :param session: https://jwtserver.darkdeal.net/en/database/
     :param telephone: international phone number format
     :param password: string
     :raises HTTPException: recaptcha_v3 raises
     :raises HTTPException: If there is no user
     :return LoginResponse
     """
-    logger.debug(telephone, password)
     await recaptcha.set_action_name('LoginPage/LoginButton').greenlight()
-    stmt = select(User).where(User.telephone == telephone)
-    result = await session.execute(stmt)
-    try:
-        user = result.scalars().one()
-        logger.debug(user)
-    except NoResultFound:
+    user = await crud.get_user(telephone)
+    logger.debug(telephone, password)
+
+    if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Неправильный номер или пароль",

@@ -17,7 +17,12 @@ class CheckCodeResponseModel(BaseModel):
     reg_token: str
 
 
-@app.post("/api/v1/auth/check_code/", response_model=CheckCodeResponseModel, tags=["Registration"])
+@app.post("/api/v1/check_code/",
+          description="User authorization by login and password",
+          # response_description=response_description,
+          response_model=CheckCodeResponseModel,
+          tags=["Registration"]
+          )
 async def check_code(
         telephone: str = Body(...),
         code: int = Body(...),
@@ -25,8 +30,8 @@ async def check_code(
         recaptcha: Recaptcha = Depends(Recaptcha)
 ):
     """Checking the code from SMS or Call
-    :param str telephone:
-    :param int code:
+    :param str telephone: Telephone number in international format
+    :param int code: 4 digit verification code
     :param redis: Redis client
     :param recaptcha: Validate Google recaptcha_v3.md v3 [return True or HTTPException]
     :return: one-time token for registration
