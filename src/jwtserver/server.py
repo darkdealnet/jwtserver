@@ -3,8 +3,6 @@ import sys
 import uvicorn
 from loguru import logger
 
-import jwtserver.api.v1.views
-
 
 def enable_logger(sink=sys.stderr, level='WARNING'):
     logging.basicConfig(level=logging.DEBUG)
@@ -15,4 +13,3 @@ def enable_logger(sink=sys.stderr, level='WARNING'):
 def dev(host='localhost', port=5000, log_level='info'):
     enable_logger(level=log_level.upper())
     uvicorn.run('jwtserver.app:app', host=host, port=port, log_level=log_level)
-

@@ -2,10 +2,14 @@ import httpx
 from typing import Literal
 from loguru import logger
 from fastapi import HTTPException, Body
+from pydantic import BaseModel
 from starlette import status
-from jwtserver.functions.config import load_config
 
-config = load_config().recaptcha_v3
+
+class RecaptchaConfig(BaseModel):
+    secret_key: str
+    score: float
+    for_tests: bool
 
 
 class Recaptcha:
@@ -13,10 +17,9 @@ class Recaptcha:
     :raises HTTPException:
     https://www.google.com/recaptcha/admin/create"""
 
-    def __init__(
-            self,
-            recaptcha_token: str = Body(...)
-    ):
+    def __init__(self, _config, recaptcha_token, environment):
+        self.config: RecaptchaConfig = _config
+        self.environment = environment
         self.action_name = None
         self.success = False
         self.action_valid = False
@@ -49,15 +52,22 @@ class Recaptcha:
         if not self.r_json['action'] == self.action_name:
             bad_request('hm... u r hacker?')
 
-        if self.r_json['score'] <= config.score:
+        if self.r_json['score'] <= self.config.score:
             bad_request('hm... u r bot?')
 
         return True
 
     async def check(self) -> 'Recaptcha':
         """send post and save response json to self.r_json"""
+        if self.environment == 'tests':
+            self.r_json = {
+                "success": self.recaptcha_token.split(":")[0],
+                "action": self.recaptcha_token.split(":")[1],
+                "score": float(self.recaptcha_token.split(":")[2]),
+            }
+            return self
         data = {
-            'secret': config.secret_key,
+            'secret': self.config.secret_key,
             'response': self.recaptcha_token,
         }
         async with httpx.AsyncClient() as client:

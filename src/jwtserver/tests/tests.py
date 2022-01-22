@@ -1,25 +1,30 @@
 import asyncio
+import datetime
 
 import aioredis
 import pytest
 from starlette.testclient import TestClient
-from jwtserver import app
-from jwtserver.Google.Recaptcha_v3 import Recaptcha
-from jwtserver.functions.init_redis import redis_conn
-from jwtserver.functions.session_db import async_db_session
-from jwtserver.tests.depends import override_async_db_session, override_redis_conn, \
-    OverrideRecaptcha, redis
+from jwtserver.app import create_app
+from jwtserver.dependencies.init_redis import redis_conn
+from jwtserver.dependencies.session_db import async_db_session
+from jwtserver.tests.depends import override_async_db_session, \
+    override_redis_conn
 
-app.dependency_overrides[async_db_session] = override_async_db_session
-app.dependency_overrides[redis_conn] = override_redis_conn
-app.dependency_overrides[Recaptcha] = OverrideRecaptcha
+app = create_app(lvl_logging='CRITICAL')
+
 pytestmark = pytest.mark.asyncio
-client = TestClient(app)
 
 
 @pytest.fixture(scope="session")
 def event_loop():
     return asyncio.get_event_loop()
+
+
+@pytest.fixture(scope='session', autouse=True)
+def d_o():
+    # app.dependency_overrides[redis_client] = override_redis_client
+    app.dependency_overrides[async_db_session] = override_async_db_session
+    app.dependency_overrides[redis_conn] = override_redis_conn
 
 
 @pytest.fixture(scope='session', autouse=True)
@@ -29,15 +34,7 @@ async def flushall():
     await r.close()
 
 
-# registration_uuid = None
-# registration_password = 'Qwerty123'
-# registration_access_token = None
-#
-# fingerprint = 'RgAAOblb90zuv3OCtiPg'
-# fingerprint_fake = 'qgBfOblb10zuv3OCtiPg'
-#
-telephone_for_test = '+71234567890'
-
+telephone_for_test = '+79138915678'
 
 # def check_refresh_token_cookie(cookies):
 #     for cookie in cookies:
@@ -49,15 +46,17 @@ telephone_for_test = '+71234567890'
 #             # assert delta_days == KEYS.REFRESH_TOKEN_EXPIRE_DAYS
 #             return True
 #     return False
+headers = {'accept': 'application/json', 'Content-Type': 'application/json'}
+
 
 def test_phone_status():
+    client = TestClient(app)
     data = {
         'telephone': telephone_for_test,
         'recaptcha_token': 'success:SignUpPage/PhoneStatus:0.8'
     }
-    headers = {'accept': 'application/json', 'Content-Type': 'application/json'}
     response = client.post(
-        "/api/v1/phone_status/",
+        "/api/v1/phone_status",
         headers=headers,
         json=data
     )
@@ -70,25 +69,26 @@ def test_phone_status():
     assert not response.json()['time']
 
 
-def test_send_code():
-    data = {
-        "telephone": telephone_for_test,
-    }
-    headers = {"accept": "application/json"}
+async def test_send_code():
+    client = TestClient(app)
     response = client.post(
-        "/api/v1/send_code/",
+        "/api/v1/send_code",
         headers=headers,
-        json=data
+        json=telephone_for_test
     )
     assert response.status_code == 200, response.text
-    # assert response.json()['status'] == 'send'
-    # repeat_response = client.post(
-    #     "api/v1/send_code/",
-    #     headers=headers,
-    #     data=data
-    # )
-    # assert repeat_response.status_code == 200, repeat_response.text
-    # assert repeat_response.json()['detail'] == 'code is send'
+    assert response.json()['send']
+    repeat_response = client.post(
+        "/api/v1/send_code",
+        headers=headers,
+        json=telephone_for_test
+    )
+    assert repeat_response.status_code == 200, repeat_response.text
+    assert repeat_response.json()['send']
+    assert repeat_response.json()['method'] == 'call'
+    assert type(repeat_response.json()['time_left']) == float
+
+    print(datetime.datetime.fromtimestamp(repeat_response.json()['time_left']))
 
 #
 # def test_check_code_valid():

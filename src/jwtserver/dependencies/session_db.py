@@ -11,4 +11,4 @@ async def async_db_session():
         db = AsyncSessionLocal()
         yield db
     finally:
-        db.close()
+        await db.close()

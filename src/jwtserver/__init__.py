@@ -1,6 +1,6 @@
 """JWTServer is a lightweight and fast JWT microservice."""
-__version__ = '0.0.15'
+__version__ = '0.0.17'
 
-from .app import app as app
-from .server import dev as dev
-import jwtserver.api.v1.views as api_v1
+from jwtserver.app import app as app
+from jwtserver.app import create_app as create_app
+from jwtserver.server import dev as dev
