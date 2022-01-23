@@ -60,11 +60,11 @@ async def phone_status(
     # except aioredis.exceptions.ConnectionError:
     #     logger.info('Redis ConnectionError')
     #     code_is_send = None
-
     if code_is_send:
         ttl = await redis.ttl(telephone)
-        return {'free': True, 'telephone': telephone, 'sent': True,
-                'time': ttl}
+        return {
+            'free': True, 'telephone': telephone, 'sent': True, 'time': ttl
+        }
 
     return {'free': True, 'telephone': telephone}
 
@@ -116,7 +116,8 @@ class RespSendCodeModel(BaseModel):
 
 
 @router.post('/send_code', response_model=RespSendCodeModel,
-             description='Sending a code through a call or SMS')
+             description='Sending a code through a call or SMS',
+             name='reg:send_code')
 async def send_code(
         telephone: str = Body(...),
         settings: Settings = Depends(get_settings),

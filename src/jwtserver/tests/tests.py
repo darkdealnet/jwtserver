@@ -8,9 +8,10 @@ from httpx import AsyncClient
 
 # app = create_app(lvl_logging='CRITICAL')
 
-pytestmark = pytest.mark.asyncio
+# pytestmark = pytest.mark.asyncio
 
 telephone_for_test = '+79138915678'
+
 
 # def check_refresh_token_cookie(cookies):
 #     for cookie in cookies:
@@ -22,49 +23,40 @@ telephone_for_test = '+79138915678'
 #             # assert delta_days == KEYS.REFRESH_TOKEN_EXPIRE_DAYS
 #             return True
 #     return False
-headers = {'accept': 'application/json', 'Content-Type': 'application/json'}
 
 
-async def test_phone_status(authorized_client: AsyncClient, app: FastAPI):
-    # client = TestClient(app)
+async def test_phone_status(client: AsyncClient, app: FastAPI):
     data = {
         'telephone': telephone_for_test,
         'recaptcha_token': 'success:SignUpPage/PhoneStatus:0.8'
     }
-    response = await authorized_client.post(
-        # "/api/v1/phone_status",
+    response = await client.post(
         app.url_path_for('reg:phone_status'),
-        headers=headers,
         json=data
     )
     assert response.status_code == 200, response.text
     assert response.headers['content-type'] == 'application/json'
-    # assert response.headers['content-length'] == '64'
     assert response.json()['free']
     assert response.json()['telephone']
     assert not response.json()['sent']
     assert not response.json()['time']
 
-# async def test_send_code():
-#     client = TestClient(app)
-#     response = client.post(
-#         "/api/v1/send_code",
-#         headers=headers,
+
+# async def test_send_code(client: AsyncClient, app: FastAPI):
+#     response = await client.post(
+#         app.url_path_for('reg:send_code'),
 #         json=telephone_for_test
 #     )
 #     assert response.status_code == 200, response.text
 #     assert response.json()['send']
-#     repeat_response = client.post(
-#         "/api/v1/send_code",
-#         headers=headers,
+#     repeat_response = await client.post(
+#         app.url_path_for('reg:send_code'),
 #         json=telephone_for_test
 #     )
 #     assert repeat_response.status_code == 200, repeat_response.text
 #     assert repeat_response.json()['send']
 #     assert repeat_response.json()['method'] == 'call'
 #     assert type(repeat_response.json()['time_left']) == float
-#
-#     print(datetime.datetime.fromtimestamp(repeat_response.json()['time_left']))
 
 #
 # def test_check_code_valid():
