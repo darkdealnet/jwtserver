@@ -68,7 +68,6 @@ def test_phone_status():
     assert not response.json()['sent']
     assert not response.json()['time']
 
-
 # async def test_send_code():
 #     client = TestClient(app)
 #     response = client.post(
