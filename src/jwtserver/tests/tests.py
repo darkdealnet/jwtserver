@@ -69,26 +69,26 @@ def test_phone_status():
     assert not response.json()['time']
 
 
-async def test_send_code():
-    client = TestClient(app)
-    response = client.post(
-        "/api/v1/send_code",
-        headers=headers,
-        json=telephone_for_test
-    )
-    assert response.status_code == 200, response.text
-    assert response.json()['send']
-    repeat_response = client.post(
-        "/api/v1/send_code",
-        headers=headers,
-        json=telephone_for_test
-    )
-    assert repeat_response.status_code == 200, repeat_response.text
-    assert repeat_response.json()['send']
-    assert repeat_response.json()['method'] == 'call'
-    assert type(repeat_response.json()['time_left']) == float
-
-    print(datetime.datetime.fromtimestamp(repeat_response.json()['time_left']))
+# async def test_send_code():
+#     client = TestClient(app)
+#     response = client.post(
+#         "/api/v1/send_code",
+#         headers=headers,
+#         json=telephone_for_test
+#     )
+#     assert response.status_code == 200, response.text
+#     assert response.json()['send']
+#     repeat_response = client.post(
+#         "/api/v1/send_code",
+#         headers=headers,
+#         json=telephone_for_test
+#     )
+#     assert repeat_response.status_code == 200, repeat_response.text
+#     assert repeat_response.json()['send']
+#     assert repeat_response.json()['method'] == 'call'
+#     assert type(repeat_response.json()['time_left']) == float
+#
+#     print(datetime.datetime.fromtimestamp(repeat_response.json()['time_left']))
 
 #
 # def test_check_code_valid():

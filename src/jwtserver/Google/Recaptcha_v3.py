@@ -46,7 +46,6 @@ class Recaptcha:
         await self.check()
         if not self.r_json['success']:
             logger.critical("invalid reCAPTCHA token")
-
             bad_request('server error: invalid reCAPTCHA token for your site')
 
         if not self.r_json['action'] == self.action_name:

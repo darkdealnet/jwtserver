@@ -6,8 +6,6 @@ from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from starlette import status
-
-from jwtserver.internal.SMSC import SMSC
 from jwtserver.internal.SMSCRules import SMSRules
 from jwtserver.settings import Settings, get_settings
 from jwtserver.Google.Recaptcha_v3 import Recaptcha

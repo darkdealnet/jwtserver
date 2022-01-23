@@ -6,7 +6,6 @@ from jwtserver import settings
 
 settings = settings.get_settings()
 
-
 # def create_pool_redis(config: ConfigModel = Depends()):
 def create_pool_redis():
     pool = aioredis.ConnectionPool.from_url(
