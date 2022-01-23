@@ -9,19 +9,22 @@ sync_engine = create_engine(
     "postgresql://jwtserver:jwtserver-password@localhost:5433/jwtserver-tests")
 async_engine = create_async_engine(
     "postgresql+asyncpg://jwtserver:jwtserver-password@localhost:5433/jwtserver-tests")
-TestingSessionLocal = sessionmaker(async_engine, expire_on_commit=False, class_=AsyncSession)
-# redis = aioredis.from_url("redis://:@localhost:6380/1", decode_responses=True)
+TestingSessionLocal = sessionmaker(async_engine, expire_on_commit=False,
+                                   class_=AsyncSession)
 
-pool = aioredis.ConnectionPool.from_url(
-    "redis://:@localhost:6380/1", max_connections=10, decode_responses=True)
-redis = aioredis.Redis(connection_pool=pool)
+
+def create_pool_redis():
+    _pool = aioredis.ConnectionPool.from_url(
+        "redis://:@localhost:6380/1",
+        max_connections=10,
+        decode_responses=True,
+    )
+    redis = aioredis.Redis(connection_pool=_pool)
+    return redis
+
 
 models.Base.metadata.drop_all(bind=sync_engine)
 models.Base.metadata.create_all(bind=sync_engine)
-
-
-def override_redis_client():
-    return redis.client()
 
 
 def override_async_db_session():
@@ -35,7 +38,7 @@ def override_async_db_session():
 
 def override_redis_conn():
     try:
-        r = redis.client()
+        r = create_pool_redis().client()
         yield r
     finally:
         r.close()

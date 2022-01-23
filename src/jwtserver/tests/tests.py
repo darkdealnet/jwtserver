@@ -1,38 +1,14 @@
-import asyncio
-import datetime
+from __future__ import annotations
 
-import aioredis
 import pytest
-from starlette.testclient import TestClient
-from jwtserver.app import create_app
-from jwtserver.dependencies.init_redis import redis_conn
-from jwtserver.dependencies.session_db import async_db_session
-from jwtserver.tests.depends import override_async_db_session, \
-    override_redis_conn
+from fastapi import FastAPI
+from httpx import AsyncClient
+# from starlette.testclient import TestClient
+# from jwtserver.app import create_app
 
-app = create_app(lvl_logging='CRITICAL')
+# app = create_app(lvl_logging='CRITICAL')
 
 pytestmark = pytest.mark.asyncio
-
-
-@pytest.fixture(scope="session")
-def event_loop():
-    return asyncio.get_event_loop()
-
-
-@pytest.fixture(scope='session', autouse=True)
-def d_o():
-    # app.dependency_overrides[redis_client] = override_redis_client
-    app.dependency_overrides[async_db_session] = override_async_db_session
-    app.dependency_overrides[redis_conn] = override_redis_conn
-
-
-@pytest.fixture(scope='session', autouse=True)
-async def flushall():
-    r = aioredis.from_url("redis://:@localhost:6380/1", decode_responses=True)
-    await r.flushall()
-    await r.close()
-
 
 telephone_for_test = '+79138915678'
 
@@ -49,14 +25,16 @@ telephone_for_test = '+79138915678'
 headers = {'accept': 'application/json', 'Content-Type': 'application/json'}
 
 
-def test_phone_status():
-    client = TestClient(app)
+async def test_phone_status(client: AsyncClient, app: FastAPI):
+    # client = TestClient(app)
+    print(client)
     data = {
         'telephone': telephone_for_test,
         'recaptcha_token': 'success:SignUpPage/PhoneStatus:0.8'
     }
-    response = client.post(
-        "/api/v1/phone_status",
+    response = await client.post(
+        # "/api/v1/phone_status",
+        app.url_path_for('reg:phone_status'),
         headers=headers,
         json=data
     )

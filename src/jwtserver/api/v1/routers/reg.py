@@ -35,7 +35,8 @@ class RespError(BaseModel):
     block_time: int | None
 
 
-@router.post('/phone_status', response_model=ResponseModel)
+@router.post('/phone_status', response_model=ResponseModel,
+             name='reg:phone_status')
 async def phone_status(
         telephone: str = Body(...),
         recaptcha_token: str = Body(...),
