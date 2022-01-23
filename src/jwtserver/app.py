@@ -59,12 +59,12 @@ def create_app(_title='JWT server', lvl_logging='INFO') -> FastAPI:
     # }
     _app.debug = True
 
-    def enable_logger(sink=sys.stderr, level='DEBUG'):
-        logging.basicConfig(level=logging.DEBUG)
-        logger.configure(handlers=[{'sink': sink, 'level': level}])
-        logger.enable('aria2p')
-
-    enable_logger(level=lvl_logging)
+    # def enable_logger(sink=sys.stderr, level='DEBUG'):
+    #     logging.basicConfig(level=logging.DEBUG)
+    #     logger.configure(handlers=[{'sink': sink, 'level': level}])
+    #     logger.enable('aria2p')
+    #
+    # enable_logger(level=lvl_logging)
     return _app
 
 

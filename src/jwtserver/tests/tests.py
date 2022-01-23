@@ -1,8 +1,8 @@
 from __future__ import annotations
-
 import pytest
 from fastapi import FastAPI
 from httpx import AsyncClient
+
 # from starlette.testclient import TestClient
 # from jwtserver.app import create_app
 
@@ -25,14 +25,13 @@ telephone_for_test = '+79138915678'
 headers = {'accept': 'application/json', 'Content-Type': 'application/json'}
 
 
-async def test_phone_status(client: AsyncClient, app: FastAPI):
+async def test_phone_status(authorized_client: AsyncClient, app: FastAPI):
     # client = TestClient(app)
-    print(client)
     data = {
         'telephone': telephone_for_test,
         'recaptcha_token': 'success:SignUpPage/PhoneStatus:0.8'
     }
-    response = await client.post(
+    response = await authorized_client.post(
         # "/api/v1/phone_status",
         app.url_path_for('reg:phone_status'),
         headers=headers,

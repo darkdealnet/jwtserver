@@ -1,5 +1,4 @@
 import httpx
-from loguru import logger
 from random import randint
 from pydantic import BaseModel, PyObject
 
