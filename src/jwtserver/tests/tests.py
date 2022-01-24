@@ -38,8 +38,8 @@ async def test_phone_status(client: AsyncClient, app: FastAPI):
     assert response.headers['content-type'] == 'application/json'
     assert response.json()['free']
     assert response.json()['telephone']
-    assert not response.json()['sent']
-    assert not response.json()['time']
+    assert response.json()['sent']
+    assert response.json()['time']
 
 
 # async def test_send_code(client: AsyncClient, app: FastAPI):

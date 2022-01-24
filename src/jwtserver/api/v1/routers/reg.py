@@ -6,7 +6,8 @@ from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from starlette import status
-from jwtserver.internal.SMSCRules import SMSRules
+from jwtserver.internal.SMSCRules import SMSRules, SendDetailsModel, \
+    SendCodeReturnModel
 from jwtserver.settings import Settings, get_settings
 from jwtserver.Google.Recaptcha_v3 import Recaptcha
 from jwtserver.api.v1.help_func.ParseToken import TokenProcessor
@@ -52,20 +53,20 @@ async def phone_status(
     await recaptcha.set_action_name('SignUpPage/PhoneStatus').greenlight()
     stmt = select(User).where(User.telephone == telephone)
     result = await session.execute(stmt)
+
     if result.scalars().first():
         return {'free': False, 'telephone': telephone}
-    code_is_send = await redis.get(telephone)
-    # try:
-    #     code_is_send = await redis.get(telephone)
-    # except aioredis.exceptions.ConnectionError:
-    #     logger.info('Redis ConnectionError')
-    #     code_is_send = None
-    if code_is_send:
-        ttl = await redis.ttl(telephone)
-        return {
-            'free': True, 'telephone': telephone, 'sent': True, 'time': ttl
-        }
 
+    sent_details_instance_redis = await redis.hgetall(telephone)
+    sent_details = SendDetailsModel(**sent_details_instance_redis)
+    if sent_details and sent_details.method:
+
+        return {
+            'free': True,
+            'telephone': telephone,
+            'sent': True,
+            'time': sent_details.block_time.timestamp()
+        }
     return {'free': True, 'telephone': telephone}
 
 

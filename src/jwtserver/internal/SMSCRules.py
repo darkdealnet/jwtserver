@@ -32,8 +32,8 @@ class SendDetailsModel(BaseModel):
 
 
 class SendCodeReturnModel(BaseModel):
-    is_sent: SendDetailsModel | None
-    error: ErrorModel | None
+    is_sent: SendDetailsModel | None = None
+    error: ErrorModel | None = None
 
 
 class SMSRules:
