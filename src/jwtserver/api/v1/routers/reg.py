@@ -60,7 +60,6 @@ async def phone_status(
     sent_details_instance_redis = await redis.hgetall(telephone)
     sent_details = SendDetailsModel(**sent_details_instance_redis)
     if sent_details and sent_details.method:
-
         return {
             'free': True,
             'telephone': telephone,
@@ -68,46 +67,6 @@ async def phone_status(
             'time': sent_details.block_time.timestamp()
         }
     return {'free': True, 'telephone': telephone}
-
-
-@router.post('/check_code',
-             description="User authorization by login and password",
-             # response_description=response_description,
-             response_model=CheckCodeResponseModel,
-
-             )
-async def check_code(
-        # redis: Redis,
-        telephone: str = Body(...),
-        code: int = Body(...),
-        redis: Redis = Depends(redis_conn),
-        recaptcha: Recaptcha = Depends(Recaptcha)
-):
-    """Checking the code from SMS or Call
-    :param str telephone: Telephone number in international format
-    :param int code: 4 digit verification code
-    :param redis: Redis client
-    :param recaptcha: Validate Google recaptcha_v3.md v3 [return True or HTTPException]
-    :return: one-time token for registration
-    """
-    await recaptcha.set_action_name('SignUpPage/CheckCode').greenlight()
-
-    code_method = await redis.get(telephone)
-    if code_method:
-        from_redis_code, method = code_method.split(":")
-        if int(from_redis_code) == code:
-            reg_token = token_hex(16)
-            await redis.set(f"{telephone}_reg_token", reg_token, 60 * 60)
-            return {"reg_token": reg_token}
-
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Неверный код",
-        )
-    raise HTTPException(
-        status_code=status.HTTP_400_BAD_REQUEST,
-        detail="Нужно запросить новый код ",
-    )
 
 
 class RespSendCodeModel(BaseModel):
@@ -160,6 +119,46 @@ async def send_code(
     #     ttl = await redis.ttl(telephone)
     #     logger.info("code is send")
     #     return {"send": True, "time": ttl, "method": method}
+
+
+@router.post('/check_code',
+             description="User authorization by login and password",
+             # response_description=response_description,
+             response_model=CheckCodeResponseModel,
+
+             )
+async def check_code(
+        # redis: Redis,
+        telephone: str = Body(...),
+        code: int = Body(...),
+        redis: Redis = Depends(redis_conn),
+        recaptcha: Recaptcha = Depends(Recaptcha)
+):
+    """Checking the code from SMS or Call
+    :param str telephone: Telephone number in international format
+    :param int code: 4 digit verification code
+    :param redis: Redis client
+    :param recaptcha: Validate Google recaptcha_v3.md v3 [return True or HTTPException]
+    :return: one-time token for registration
+    """
+    await recaptcha.set_action_name('SignUpPage/CheckCode').greenlight()
+
+    code_method = await redis.get(telephone)
+    if code_method:
+        from_redis_code, method = code_method.split(":")
+        if int(from_redis_code) == code:
+            reg_token = token_hex(16)
+            await redis.set(f"{telephone}_reg_token", reg_token, 60 * 60)
+            return {"reg_token": reg_token}
+
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Неверный код",
+        )
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Нужно запросить новый код ",
+    )
 
 
 class Data(BaseModel):
